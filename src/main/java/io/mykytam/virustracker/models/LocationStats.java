@@ -39,12 +39,16 @@ public class LocationStats {
         this.differenceFromPrevious = differenceFromPrevious;
     }
 
+
     @Override
     public String toString() {
         return "LocationStats{" +
                 "state='" + state + '\'' +
                 ", country='" + country + '\'' +
                 ", latestTotalCases=" + latestTotalCases +
+                ", differenceFromPrevious=" + differenceFromPrevious +
                 '}';
     }
+
+
 }
