@@ -25,6 +25,10 @@ public class CoronaVirusDataService {
 
     private List<LocationStats> allStats = new ArrayList<>();
 
+    public List<LocationStats> getAllStats() {
+        return allStats;
+    }
+
     @PostConstruct // telling Spring -  when constructed CoronaVirusDataService, execute this method
     @Scheduled(cron = "* * 1 * * *") // schedule the run of a method on regular bases
     public void fetchVirusData() throws IOException, InterruptedException {
