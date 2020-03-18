@@ -5,6 +5,7 @@ public class LocationStats {
     private String state;
     private String country;
     private int latestTotalCases;
+    private  int differenceFromPrevious;
 
     public String getState() {
         return state;
@@ -28,6 +29,14 @@ public class LocationStats {
 
     public void setLatestTotalCases(int latestTotalCases) {
         this.latestTotalCases = latestTotalCases;
+    }
+
+    public int getDifferenceFromPrevious() {
+        return differenceFromPrevious;
+    }
+
+    public void setDifferenceFromPrevious(int differenceFromPrevious) {
+        this.differenceFromPrevious = differenceFromPrevious;
     }
 
     @Override

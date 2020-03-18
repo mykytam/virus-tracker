@@ -5,24 +5,40 @@
 <head>
     <title>Corona Tracker</title>
     <meta http-equiv="Content-Type" content="text/html"; charset="UTF-8"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 
 <body>
+<div class = "container">
     <h1>Coronavirus Tracker</h1>
+    <p>On this page you can see the current number of Coronavirus cases reported</p>
 
-    <table>
+<div class="jumbotron">
+    <h1 class="display-4" th:text="${totalReportedCases}"></h1>
+    <p class="lead">Total cases reported as of today</p>
+    <hr class = "my-4">
+    <p>
+        <span>New cases reported since previous day:</span>
+        <span th:text="${totalReportedNewCases}"></span>
+    </p>
+</div>
+
+    <table class="table">
         <tr>
             <th>State</th>
             <th>Country</th>
             <th>Total cases reported</th>
+            <th>Changes since previous day</th>
         </tr>
 
         <tr th:each="locationStat : ${locationStats}">
             <td th:text="${locationStat.state}"></td>
             <td th:text="${locationStat.country}"></td>
             <td th:text="${locationStat.latestTotalCases}">0</td>
+            <td th:text="${locationStat.differenceFromPrevious}">0</td>
         </tr>
     </table>
+</div>
 
 </body>
 
