@@ -41,15 +41,15 @@
     <br>
     <table class="table">
         <tr>
-            <th>State</th>
             <th>Country</th>
+            <th>State</th>
             <th>Сases reported</th>
             <th>Changes since previous day</th>
         </tr>
 
         <tr th:each="locationStat : ${locationStats}">
-            <td th:text="${locationStat.state}"></td>
             <td th:text="${locationStat.country}"></td>
+            <td th:text="${locationStat.state}"></td>
             <td th:text="${locationStat.latestTotalCases}">0</td>
             <td th:text="${locationStat.differenceFromPrevious}">0</td>
         </tr>
