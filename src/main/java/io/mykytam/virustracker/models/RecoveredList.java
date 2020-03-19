@@ -1,6 +1,6 @@
 package io.mykytam.virustracker.models;
 
-public class LocationRecovered {
+public class RecoveredList {
     private int recovered;
 
     public int getRecovered() {

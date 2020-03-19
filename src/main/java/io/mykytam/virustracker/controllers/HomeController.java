@@ -1,8 +1,8 @@
 package io.mykytam.virustracker.controllers;
 
-import io.mykytam.virustracker.models.LocationDiedStats;
-import io.mykytam.virustracker.models.LocationRecovered;
-import io.mykytam.virustracker.models.LocationStats;
+import io.mykytam.virustracker.models.DiedList;
+import io.mykytam.virustracker.models.RecoveredList;
+import io.mykytam.virustracker.models.ReportedList;
 import io.mykytam.virustracker.services.CoronaVirusDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,14 +21,14 @@ public class HomeController {
     @GetMapping("/") // return home template
     public String home(Model model) {
         // getting list of objects, converting them to a stream, mapping to the Integer and summing up
-        List<LocationStats> allStats = coronaVirusDataService.getAllStats();
+        List<ReportedList> allStats = coronaVirusDataService.getAllStats();
         int totalCases = allStats.stream().mapToInt(stat -> stat.getLatestTotalCases()).sum();
         int totalNewCases = allStats.stream().mapToInt(stat -> stat.getDifferenceFromPrevious()).sum();
 
-        List<LocationDiedStats> allDiedStats = coronaVirusDataService.getAllDiedStats();
+        List<DiedList> allDiedStats = coronaVirusDataService.getAllDiedStats();
         int totalDiedCases = allDiedStats.stream().mapToInt(stat -> stat.getDied()).sum();
 
-        List<LocationRecovered> allRecoveredStats = coronaVirusDataService.getAllRecoveredStats();
+        List<RecoveredList> allRecoveredStats = coronaVirusDataService.getAllRecoveredStats();
         int totalRecoveredCases = allRecoveredStats.stream().mapToInt(stat -> stat.getRecovered()).sum();
 
 

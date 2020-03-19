@@ -1,6 +1,6 @@
 package io.mykytam.virustracker.models;
 
-public class LocationStats {
+public class ReportedList {
 
     private String state;
     private String country;

@@ -1,8 +1,8 @@
 package io.mykytam.virustracker.services;
 
-import io.mykytam.virustracker.models.LocationDiedStats;
-import io.mykytam.virustracker.models.LocationRecovered;
-import io.mykytam.virustracker.models.LocationStats;
+import io.mykytam.virustracker.models.DiedList;
+import io.mykytam.virustracker.models.RecoveredList;
+import io.mykytam.virustracker.models.ReportedList;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -24,22 +24,22 @@ import java.util.List;
 public class CoronaVirusDataService {
 
     private static String VIRUS_DATA_URL = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv";
-    private List<LocationStats> allStats = new ArrayList<>();
-    public List<LocationStats> getAllStats() { return allStats; }
+    private List<ReportedList> allStats = new ArrayList<>();
+    public List<ReportedList> getAllStats() { return allStats; }
 
     private static String VIRUS_DIED_URL = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Deaths.csv";
-    private List<LocationDiedStats> allDiedStats =  new ArrayList<>();
-    public List<LocationDiedStats> getAllDiedStats() { return allDiedStats; }
+    private List<DiedList> allDiedStats =  new ArrayList<>();
+    public List<DiedList> getAllDiedStats() { return allDiedStats; }
 
     private static String VIRUS_RECOVERED_URL = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Recovered.csv";
-    private List<LocationRecovered> allRecoveredStats =  new ArrayList<>();
-    public List<LocationRecovered> getAllRecoveredStats() { return allRecoveredStats; }
+    private List<RecoveredList> allRecoveredStats =  new ArrayList<>();
+    public List<RecoveredList> getAllRecoveredStats() { return allRecoveredStats; }
 
     @PostConstruct // telling Spring -  when constructed CoronaVirusDataService, execute this method
-    @Scheduled(cron = "* * 1 * * *") // schedule the run of a method on regular bases
+    @Scheduled(cron = "0 0 6,19 * * *") // schedule the run of a method on regular bases
     public void fetchVirusData() throws IOException, InterruptedException {
         // makes http call to url, sending the request
-        List<LocationStats> newStats = new ArrayList<>(); // not getting error responses while rebuilding
+        List<ReportedList> newStats = new ArrayList<>(); // not getting error responses while rebuilding
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(VIRUS_DATA_URL)) // creates URI out of String
@@ -52,7 +52,7 @@ public class CoronaVirusDataService {
         StringReader csvBodyReader = new StringReader(httpResponse.body()); // reader that parses String
         Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(csvBodyReader);
         for (CSVRecord record:records) {
-            LocationStats locationStat = new LocationStats();
+            ReportedList locationStat = new ReportedList();
             locationStat.setState(record.get("Province/State"));
             locationStat.setCountry(record.get("Country/Region"));
             int latestCases = Integer.parseInt(record.get(record.size()-1));
@@ -65,9 +65,9 @@ public class CoronaVirusDataService {
     }
 
     @PostConstruct
-    @Scheduled(cron = "* * 1 * * *")
+    @Scheduled(cron = "0 0 6,19 * * *")
     public void fetchVirusDiedData() throws IOException, InterruptedException {
-        List<LocationDiedStats> newStats = new ArrayList<>();
+        List<DiedList> newStats = new ArrayList<>();
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(VIRUS_DIED_URL))
@@ -75,10 +75,10 @@ public class CoronaVirusDataService {
 
         HttpResponse<String> httpResponse = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        StringReader csvBodyReader = new StringReader(httpResponse.body()); // reader that parses String
+        StringReader csvBodyReader = new StringReader(httpResponse.body());
         Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(csvBodyReader);
         for (CSVRecord record:records) {
-            LocationDiedStats locationDiedStat = new LocationDiedStats();
+            DiedList locationDiedStat = new DiedList();
             int died = Integer.parseInt(record.get(record.size()-1));
             locationDiedStat.setDied(died);
             newStats.add(locationDiedStat);
@@ -87,9 +87,9 @@ public class CoronaVirusDataService {
     }
 
     @PostConstruct
-    @Scheduled(cron = "* * 1 * * *")
+    @Scheduled(cron = "0 0 6,19 * * *")
     public void fetchVirusRecoveredData() throws IOException, InterruptedException {
-        List<LocationRecovered> newStats = new ArrayList<>();
+        List<RecoveredList> newStats = new ArrayList<>();
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(VIRUS_RECOVERED_URL))
@@ -97,10 +97,10 @@ public class CoronaVirusDataService {
 
         HttpResponse<String> httpResponse = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        StringReader csvBodyReader = new StringReader(httpResponse.body()); // reader that parses String
+        StringReader csvBodyReader = new StringReader(httpResponse.body());
         Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(csvBodyReader);
         for (CSVRecord record:records) {
-            LocationRecovered locationRecoveredStat = new LocationRecovered();
+            RecoveredList locationRecoveredStat = new RecoveredList();
             int recovered = Integer.parseInt(record.get(record.size()-1));
             locationRecoveredStat.setRecovered(recovered);
             newStats.add(locationRecoveredStat);

@@ -1,6 +1,6 @@
 package io.mykytam.virustracker.models;
 
-public class LocationDiedStats {
+public class DiedList {
     private int died;
 
     public int getDied() {
