@@ -14,22 +14,25 @@ import java.util.List;
 @Controller
 public class HomeController {
 
-    @Autowired // getting access to class, to put it's methods in model
-    CoronaVirusDataService coronaVirusDataService;
+    private CoronaVirusDataService coronaVirusDataService;
 
+    @Autowired
+    public HomeController(CoronaVirusDataService coronaVirusDataService) {
+        this.coronaVirusDataService = coronaVirusDataService;
+    }
 
     @GetMapping("/") // return home template
     public String home(Model model) {
         // getting list of objects, converting them to a stream, mapping to the Integer and summing up
         List<ReportedList> allStats = coronaVirusDataService.getAllStats();
-        int totalCases = allStats.stream().mapToInt(stat -> stat.getLatestTotalCases()).sum();
-        int totalNewCases = allStats.stream().mapToInt(stat -> stat.getDifferenceFromPrevious()).sum();
+        int totalCases = allStats.stream().mapToInt(ReportedList::getLatestTotalCases).sum();
+        int totalNewCases = allStats.stream().mapToInt(ReportedList::getDifferenceFromPrevious).sum();
 
         List<DiedList> allDiedStats = coronaVirusDataService.getAllDiedStats();
-        int totalDiedCases = allDiedStats.stream().mapToInt(stat -> stat.getDied()).sum();
+        int totalDiedCases = allDiedStats.stream().mapToInt(DiedList::getDied).sum();
 
         List<RecoveredList> allRecoveredStats = coronaVirusDataService.getAllRecoveredStats();
-        int totalRecoveredCases = allRecoveredStats.stream().mapToInt(stat -> stat.getRecovered()).sum();
+        int totalRecoveredCases = allRecoveredStats.stream().mapToInt(RecoveredList::getRecovered).sum();
 
 
         // we can put something in a model
